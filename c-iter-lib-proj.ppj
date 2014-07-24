@@ -27,6 +27,7 @@ LIB = $(PellesCDir)\Lib\Win64;$(PellesCDir)\Lib#
 # 
 "C Iterator Library": \
 	output\fold.obj \
+	output\generator.obj \
 	output\iterator.obj
 	$(LINK) $(LINKFLAGS) -out:"$@" $**
 
@@ -45,6 +46,14 @@ output\fold.obj: \
 	fold.c \
 	binop.h \
 	fold.h \
+	iterator.h
+	$(CC) $(CCFLAGS) "$!" -Fo"$@"
+
+# 
+# Build generator.obj.
+# 
+output\generator.obj: \
+	generator.c \
 	iterator.h
 	$(CC) $(CCFLAGS) "$!" -Fo"$@"
 

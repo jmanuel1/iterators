@@ -1,5 +1,5 @@
-﻿#ifndef ___iter_FOLD_H_INCLUDED___
-    #define ___iter_FOLD_H_INCLUDED___
+#ifndef ___ITER_FOLD_H_INCLUDED___
+    #define ___ITER_FOLD_H_INCLUDED___
 
     #include "binop.h"
 

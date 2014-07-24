@@ -1,5 +1,5 @@
-﻿#ifndef ___iter_BINOP_H_INCLUDED___
-    #define ___iter_BINOP_H_INCLUDED___
+#ifndef ___ITER_BINOP_H_INCLUDED___
+    #define ___ITER_BINOP_H_INCLUDED___
 
     /**** Types: ****/
 

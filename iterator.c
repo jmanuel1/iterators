@@ -6,9 +6,10 @@
 #include "iterator.h" /* Make interface external. */
 
 /* Return a new iterator. */
-ITER_iterator_t *ITER_new_iterator(void *iterable, ITER_item_func_t item)
+ITER_iterator_t *ITER_new_iterator(void *iterable, ITER_item_func_t item, 
+    ITER_next_func_t next)
 {
-    ret = (ITER_iterator *) malloc(sizeof(iter_obj));
+    ret = (ITER_iterator_t *) malloc(sizeof(iter_obj));
     
     ret.iterable = iterable;
     ret.item = item;

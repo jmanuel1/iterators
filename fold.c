@@ -1,4 +1,4 @@
-﻿/* Project includes. */
+/* Project includes. */
 #include "iterator.h"
 #include "fold.h"
 #include "binop.h"
