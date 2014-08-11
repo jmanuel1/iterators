@@ -23,7 +23,9 @@
         struct \
         { \
             void *iterable; \
-            /* For generators, .item is NULL. */ \
+            /* \
+            For generators (if such a thing is implemented), .item is NULL. \
+            */ \
             elem_type (*item)(int index, void *iterable, bool *terminate); \
             elem_type (*next)(void *iterable, bool *terminate); \
         }

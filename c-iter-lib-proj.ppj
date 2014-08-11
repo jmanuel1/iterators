@@ -22,21 +22,6 @@ SIGNFLAGS = -location:CU -store:MY -timeurl:http://timestamp.verisign.com/script
 INCLUDE = $(PellesCDir)\Include\Win;$(PellesCDir)\Include#
 LIB = $(PellesCDir)\Lib\Win64;$(PellesCDir)\Lib#
 
-# 
-# Build c-iter-lib-proj.exe.
-# 
-c-iter-lib-proj.exe: \
-	output\generator.obj
-	$(LINK) $(LINKFLAGS) -out:"$@" $**
-
-# 
-# Build generator.obj.
-# 
-output\generator.obj: \
-	generator.c \
-	iterator.h
-	$(CC) $(CCFLAGS) "$!" -Fo"$@"
+.EXCLUDEDFILES:
 
 .SILENT:
-
-.EXCLUDEDFILES:
