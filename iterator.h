@@ -1,6 +1,7 @@
 #ifndef ___ITER_ITERATOR_H_INCLUDED___
     #define ___ITER_ITERATOR_H_INCLUDED___
 
+    /* Standard includes. */
     #include <stdbool.h>
 
     /* Enum to represent values returned by a for-each body. */
@@ -10,35 +11,44 @@
         ITER_BREAK;
     } ITER_for_body_ret_val_t;
 
-    /* Type to represent functions that return items from an iterable. */
-    typedef void *(*ITER_item_func_t)(int index, void *iterable, 
-        bool *terminate);
-
     /* 
-    Type to represent functions that return the next item from an iterable. 
+    Type to represent for-each bodies. The state argument should be an array 
+    of pointers to void representing state to be passed to the for-each body. 
     */
-    typedef void *(*ITER_next_func_t)(void *iterable, bool *terminate);
-
-    /* Type to represent for-each bodies. */
     typedef ITER_for_body_ret_val_t 
-        (*ITER_for_body_t)(void *item, void **args);
+        (*ITER_for_body_t)(void *item, void *state[]);
 
-    /* Type to represent iterators. */
-    typedef struct 
-    {
-        void *iterable;
-        ITER_item_func_t item; /* For generators, this is NULL. */
-        ITER_next_func_t next;
-    } ITER_iterator_t;
+    /* Type-generic way to represent iterators. */
+    #define ITER_iterator_t(elem_type) \
+        struct \
+        { \
+            void *iterable; \
+            /* For generators, .item is NULL. */ \
+            elem_type (*item)(int index, void *iterable, bool *terminate); \
+            elem_type (*next)(void *iterable, bool *terminate); \
+        }
 
     /**** Functions: ****/
 
-    /* Return a new iterator. */
-    ITER_iterator_t *ITER_new_iterator(void *iterable, ITER_item_func_t item, 
-        ITER_next_func_t next);
-    /* Free the memory taken by an iterator. */
-    void ITER_del_iterator(ITER_iterator_t **iterator);
-    /* Call func on every element returned by iterator in order. */
-    void ITER_for_each(ITER_iterator_t *iterator, ITER_for_body_t body, 
-        void **func_args);
+    /* Type-generic solution to create iterators with malloc()ating them first. */
+    #define ITER_new_iterator(iterable) \
+        {(void *) &iterable, iterable.__item__, iterable.__next__}
+
+    /* Type-generic for-each. */
+    #define ITER_for_each(iterator, elem_type, body, state) \
+        do \
+        { \
+            elem_type item; \
+            bool terminate, break_now; \
+            while (true) \
+            { \
+                /* Use iterator.next() to support generators. */ \
+                item = iterator.next(iterator.iterable, &terminate); \
+                break_now = (body(item, state) == ITER_BREAK); \
+                if (terminate || break_now) \
+                { \
+                    break; \
+                } \
+            } \
+        } while (false) /* No semi-colon. */
 #endif

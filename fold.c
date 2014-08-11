@@ -1,84 +1,95 @@
+/* Standard includes. */
+#include <stdbool.h>
+
 /* Project includes. */
 #include "iterator.h"
 #include "fold.h"
 #include "binop.h"
 
-void *ITER_left_fold(ITER_iterator_t *iterator, 
-    ITER_binary_operation operation)
-{
-    void *item, *ret = NULL;
-    int index = 0;
-    bool terminate;
+/* Type-generic left-fold without void pointers (no-void* implementation) */
+#define ITER_left_fold(iterator, elem_type, operation, default, result) \
+    do \
+    { \
+        elem_type item, ret = default; \
+        bool terminate; \
+        while (true) \
+        { \
+            /* Use iterator.next() to support generators. */ \
+            item = iterator.next(iterator.iterable, &terminate); \
+            if (terminate) \
+            { \
+                break; \
+            } \
+            ret = operation(ret, item); \
+        } \
+        result = ret; /* Assign the result to a variable in the enclosing \
+        scope. */ \
+    } while (false) /* No semi-colon. */
 
-    while (true)
-    {
-        item = iterator->item(index, iterator->iterable, &terminate);
-        if (terminate)
-        {
-            break;
-        }
-        ret = operation(ret, item);
-        index++;
+#define ITER_right_fold(iterator, elem_type, operation, default, result, error, \
+    num_of_elements) \
+    do \
+    { \
+        elem_type item, ret = default; \
+        int index = num_of_elements; \
+        bool terminate; \
+        while (--index != -1) \
+        { \
+            /* Use iterator.item(); generators don't support this. */ \
+            if (iterator.item == NULL) \
+            { \
+                error = true; /* Throw an error. */ \
+                break; \
+            } \
+            item = iterator.item(index, iterator.iterable, &terminate); \
+            ret = operator(ret, item); \
+        } \
+        if (error) \
+        { \
+            break; \
+        } \
+        result = ret; \
+    } while (false) /* No semi-colon. */
+
+#define ITER_left_fold_1(iterator, elem_type, operation, result) \
+    do \
+    { \
+        elem_type item, ret; \
+        int index = 0; \
+        bool terminate = false; \
+        /* Assume the iterable is not empty. */ \
+        ret = iterator.next(iterator.iterable, &terminate); \
+        while (true) \
+        { \
+            item = iterator.next(iterator.iterable, &terminate); \
+            if (terminate) \
+            { \
+                break; \
+            } \
+            ret = operation(ret, item); \
+        } \
+        result = ret; \
     }
 
-    return ret;
-}
-
-void *ITER_right_fold(ITER_iterator_t *iterator, 
-    ITER_binary_operation operation, size_t num_of_elements)
-{
-    void *item, *ret = NULL;
-    int index = num_of_elements;
-    bool terminate = false;
-
-    while (--index != -1)
-    {
-        item = iterator->item(index, iterator->iterable, &terminate);
-        ret = operation(ret, item);
+#define ITER_right_fold_1(iterator, elem_type, operation, result, \
+    error, num_of_elements) \
+    do \
+    { \
+        elem_type item, ret; \
+        int index = num_of_elements - 1; \
+        bool terminate = false; \
+        /* Check for iterator.item() */ \
+        if (iterator.item == NULL) \
+        { \
+            error = true; \
+            break; \
+        } \
+        /* Assume a non-empty iterable. */ \
+        ret = iterator.item(index, iterator.iterable, &terminate); \
+        while (--index != -1) \
+        { \
+            item = iterator.item(index, iterator.iterable, &terminate); \
+            ret = operation(ret, item); \
+        } \
+        return ret; \
     }
-
-    return ret;
-}
-
-void *ITER_left_fold_1(ITER_iterator_t *iterator, 
-    ITER_binary_operation operation)
-{
-    void *item, *ret;
-    int index = 0;
-    bool terminate = false;
-
-    /* Assume the iterable is not empty. */
-    ret = iterator->item(0, iterator->iterable, &terminate);
-
-    while (true)
-    {
-        item = iterator->item(index, iterator->iterable, &terminate);
-        if (terminate)
-        {
-            break;
-        }
-        ret = operation(ret, item);
-        index++;
-    }
-
-    return ret;
-}
-
-void *ITER_right_fold_1(ITER_iterator_t *iterator, 
-    ITER_binary_operation operation, size_t num_of_elements)
-{
-    void *item, *ret = NULL;
-    int index = num_of_elements - 1;
-    bool terminate = false;
-
-    /* Assume a non-empty iterable. */
-    ret = iterator->item(index, iterator->iterable, &terminate);
-
-    while (--index != -1)
-    {
-        item = iterator->item(index, iterator->iterable, &terminate);
-        ret = operation(ret, item);
-    }
-
-    return ret;
-}

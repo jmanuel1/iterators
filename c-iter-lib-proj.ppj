@@ -23,31 +23,11 @@ INCLUDE = $(PellesCDir)\Include\Win;$(PellesCDir)\Include#
 LIB = $(PellesCDir)\Lib\Win64;$(PellesCDir)\Lib#
 
 # 
-# Build C Iterator Library.
+# Build c-iter-lib-proj.exe.
 # 
-"C Iterator Library": \
-	output\fold.obj \
-	output\generator.obj \
-	output\iterator.obj
+c-iter-lib-proj.exe: \
+	output\generator.obj
 	$(LINK) $(LINKFLAGS) -out:"$@" $**
-
-# 
-# Build iterator.obj.
-# 
-output\iterator.obj: \
-	iterator.c \
-	iterator.h
-	$(CC) $(CCFLAGS) "$!" -Fo"$@"
-
-# 
-# Build fold.obj.
-# 
-output\fold.obj: \
-	fold.c \
-	binop.h \
-	fold.h \
-	iterator.h
-	$(CC) $(CCFLAGS) "$!" -Fo"$@"
 
 # 
 # Build generator.obj.
