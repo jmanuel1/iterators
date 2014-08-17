@@ -7,7 +7,9 @@
     /* Project includes. */
     #include "iterator.h"
 
-    /* Type-generic left-fold without void pointers (no-void* implementation) */
+    /* 
+    Type-generic left-fold without void pointers (no-void* implementation) 
+    */
     #define ITER_left_fold(iterator, elem_type, operation, default, result) \
         do \
         { \
@@ -27,8 +29,15 @@
             scope. */ \
         } while (false) /* No semi-colon. */
 
-    #define ITER_right_fold(iterator, elem_type, operation, default, result, error, \
-        num_of_elements) \
+    #define ITER_right_fold( \
+        iterator, \
+        elem_type, \
+        operation, \
+        default, \
+        result, \
+        error, \
+        num_of_elements \
+        ) \
         do \
         { \
             elem_type item, ret = default; \

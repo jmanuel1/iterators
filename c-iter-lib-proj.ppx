@@ -4,24 +4,6 @@
 	<category name="iterator.c" />
 	<category name="binop.h" />
 	<category name="fold.h" />
-	<category name="iterator.h">
-		<category name="Window">
-			<property name="Left" type="integer">52</property>
-			<property name="Top" type="integer">52</property>
-			<property name="Right" type="integer">844</property>
-			<property name="Bottom" type="integer">404</property>
-			<property name="Maximized" type="integer">0</property>
-			<property name="Active" type="integer">0</property>
-		</category>
-	</category>
-	<category name="generator.c">
-		<category name="Window">
-			<property name="Left" type="integer">-8</property>
-			<property name="Top" type="integer">-31</property>
-			<property name="Right" type="integer">1067</property>
-			<property name="Bottom" type="integer">478</property>
-			<property name="Maximized" type="integer">1</property>
-			<property name="Active" type="integer">1</property>
-		</category>
-	</category>
+	<category name="iterator.h" />
+	<category name="generator.c" />
 </settings>
