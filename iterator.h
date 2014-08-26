@@ -30,8 +30,6 @@
             elem_type (*next)(void *iterable, bool *terminate); \
         }
 
-    /**** Functions: ****/
-
     /* Type-generic solution to create iterators with malloc()ating them first. */
     #define ITER_new_iterator(iterable) \
         {(void *) &iterable, iterable.__item__, iterable.__next__}

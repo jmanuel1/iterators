@@ -81,8 +81,14 @@
             result = ret; \
         }
 
-    #define ITER_right_fold_1(iterator, elem_type, operation, result, \
-        error, num_of_elements) \
+    #define ITER_right_fold_1( \
+        iterator, \
+        elem_type, \
+        operation, \
+        result, \
+        error, \
+        num_of_elements \
+        ) \
         do \
         { \
             elem_type item, ret; \
